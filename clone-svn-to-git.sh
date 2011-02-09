@@ -14,9 +14,12 @@ root=$(pwd)
 # Git-svn proxy: git-repo
 cd $root
 git svn clone --prefix=svn/ file://$root/svn-repo git-repo
-# create a svn-sync branch
+
+# Initialize "pointer" to last synced commit
+# and check that branch out (so master is pushable)
 cd $root/git-repo
-git co -b svn-sync-branch master
+git branch svn/last-sync master
+git checkout svn/last-sync
 
 ##############################################################
 # Git working copy
