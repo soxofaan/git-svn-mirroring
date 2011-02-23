@@ -1,7 +1,9 @@
 #!/bin/bash
 
+# TODO: detect current checked out branch/HEAD and return to it after completion.
+
 die() {
-	echo "master-sync: $*"
+	echo "sync-git-master-to-svn died: $*"
 	exit 1
 }
 
@@ -52,8 +54,10 @@ git svn dcommit
 
 # Update the pointer to the last synced commit
 git branch -f $svnlastsync $gitmaster
-git checkout $svnlastsync
 
 # Clean up temporary work branch (release mutex).
 git branch -D $workbranch
+
+# Return to master branch
+git checkout $gitmaster
 
