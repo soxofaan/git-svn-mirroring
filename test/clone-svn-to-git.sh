@@ -12,5 +12,6 @@ cd $root
 git svn clone --prefix=svn/ file://$root/svn-repo git-repo
 
 cd $root/git-repo
-git checkout -b svn-sync-branch master
-git branch svn-last-sync master
+
+git branch svn-sync/svn-side master
+git branch svn-sync/git-side master

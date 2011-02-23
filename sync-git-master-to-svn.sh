@@ -10,11 +10,12 @@ die() {
 # The git master branch that has to be synced to SVN.
 gitmaster=master
 # The branch that is used to interface with SVN through git-svn rebase and dcommit.
-svnsyncbranch=svn-sync-branch
+svnside=svn-sync/svn-side
 # Pointer (on the git master branch) to the last synced commit.
-svnlastsync=svn-last-sync
-# Temporary work branch that will be ported with rebase from $gitmaster to $svnsyncbranch.
-workbranch=svn-tmp
+gitside=svn-sync/git-side
+# Temporary work branch that will be ported with rebase from $gitmaster to $svnside.
+work=svn-sync/tmp-git2svn
+
 
 # Handy for dedbugging
 set -x
@@ -22,10 +23,10 @@ set -x
 
 # Set a temporary working branch, pointing at current master.
 # Note that this branch also acts as sort of mutex.
-git branch $workbranch $gitmaster || die 'Could not create temporary working branch, maybe another sync is in progress?'
+git branch $work $gitmaster || die 'Could not create temporary working branch, maybe another sync is in progress?'
 
 # Rebase the commits between last sync point and current master on top of the svn sync branch.
-git rebase --onto $svnsyncbranch $svnlastsync $workbranch
+git rebase --onto $svnside $gitside $work
 successfulrebase=$?
 
 if [ $successfulrebase -ne 0 ]; then
@@ -33,30 +34,30 @@ if [ $successfulrebase -ne 0 ]; then
 	git rebase --abort
 
 	# Start over: reset working branch to last sync point.
-	git checkout $svnlastsync
-	git branch -f $workbranch $svnlastsync
-	git checkout $workbranch
+	git checkout $gitside
+	git branch -f $work $gitside
+	git checkout $work
 	# Now squash the new commits to one commit
 	# (to avoid the rebase problems) and commit on the temporary branch.
 	git merge --squash $gitmaster
 	git commit -F .git/SQUASH_MSG
 
 	# Rebase the squashed commit on top of the svn sync branch.
-	git rebase --onto $svnsyncbranch $svnlastsync $workbranch
+	git rebase --onto $svnside $gitside $work
 fi
 
 # Fast forward the svn sync branch with the rebased/squashed commits.
-git checkout $svnsyncbranch
-git merge --ff-only $workbranch
+git checkout $svnside
+git merge --ff-only $work
 
-# Send the new rebased/squashed commits to Subversion.
+# Send the new rebased/squashed commits to Subversion (updated the SVN-side pointer $svnside).
 git svn dcommit
 
-# Update the pointer to the last synced commit.
-git branch -f $svnlastsync $gitmaster
+# Update the Git-side pointer to the last synced commit.
+git branch -f $gitside $gitmaster
 
 # Clean up temporary work branch (release mutex).
-git branch -D $workbranch
+git branch -D $work
 
 # Return to master branch.
 git checkout $gitmaster

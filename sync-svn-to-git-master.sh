@@ -10,37 +10,36 @@ die() {
 # The git master branch that has to be synced to SVN.
 gitmaster=master
 # The branch that is used to interface with SVN through git-svn rebase and dcommit.
-svnsyncbranch=svn-sync-branch
+svnside=svn-sync/svn-side
 # Pointer (on the git master branch) to the last synced commit.
-svnlastsync=svn-last-sync
+gitside=svn-sync/git-side
 # Temporary work branch pointers for porting the commits.
-workbranchstart=svn-tmp-start
-workbranchend=svn-tmp-end
+workstart=svn-sync/tmp-svn2git-start
+workend=svn-sync/tmp-svn2git-end
 
 # Handy for dedbugging
 set -x
 
 # Set pointer to last commit from current SVN branch.
 # Note that we use this branch as sort of mutex.
-git branch $workbranchstart $svnsyncbranch || die 'Could not create temporary working branch, maybe another sync is in progress?'
+git branch $workstart $svnside || die 'Could not create temporary working branch, maybe another sync is in progress?'
 
 # Git-svn fetch and rebase.
-git checkout $svnsyncbranch
+git checkout $svnside
 git svn rebase
 
 # Create temporary work branch to be ported to git master.
-git branch $workbranchend $svnsyncbranch
+git branch $workend $svnside
 
 # Rebase work branch on top of git master.
-git rebase --onto $svnlastsync $workbranchstart $workbranchend
+git rebase --onto $gitside $workstart $workend
 
 # Merge work branch in master
 git checkout $gitmaster
-git merge $workbranchend
-successfulmerge=$?
-git branch -f $svnlastsync $gitmaster
+git merge $workend
+git branch -f $gitside $gitmaster
 
 # Clean up temporary work branches (release mutex).
-git branch -D $workbranchstart
-git branch -D $workbranchend
+git branch -D $workstart
+git branch -D $workend
 
