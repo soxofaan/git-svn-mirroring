@@ -20,6 +20,13 @@ work=svn-sync/tmp-git2svn
 # Handy for dedbugging
 set -x
 
+# Check that SVN-side and Git are in sync
+diff=$(git diff svn-sync/svn-side..svn-sync/git-side | wc -c)
+if [ $diff -gt 0 ]
+then
+	die "svn-sync/svn-side and svn-sync/git-side are out of sync"
+fi
+
 
 # Set a temporary working branch, pointing at current master.
 # Note that this branch also acts as sort of mutex.
