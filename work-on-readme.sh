@@ -3,18 +3,17 @@
 # Show all commands as we go allong.
 set -x
 
-
 git co master
 
-echo 'Starting over' > readme.txt
-git ci -a -m 'starting over'
+echo "---------------" >> readme.txt
+date >> readme.txt
+git ci -a -m 'starting with work'
 
 echo 'aaa' >> readme.txt
 git ci -a -m 'aaa'
 
 echo 'bbb' >> readme.txt
 git ci -a -m 'bbb'
-
 
 git co -b branch-c
 echo 'ccc' >> readme.txt
