@@ -11,7 +11,7 @@ die() {
 gitmaster=master
 # The branch that is used to interface with SVN through git-svn rebase and dcommit.
 svnsyncbranch=svn-sync-branch
-# Pointer to the last synced commit of the git master branch.
+# Pointer (on the git master branch) to the last synced commit.
 svnlastsync=svn-last-sync
 # Temporary work branch that will be ported with rebase from $gitmaster to $svnsyncbranch.
 workbranch=svn-tmp
