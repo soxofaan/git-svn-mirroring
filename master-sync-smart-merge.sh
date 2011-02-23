@@ -5,13 +5,12 @@ die() {
 	exit 1
 }
 
-#trap 'echo error; exit' ERR
-
 set -x
 
 
-# Set a temporary working branch, pointing at current master
-git branch -f svn-tmp master
+# Set a temporary working branch, pointing at current master.
+# Note that this branch also acts as sort of mutex.
+git branch svn-tmp master || die 'Could not create temporary working branch, maybe another sync is in progress?'
 
 # Rebase the commits between last sync point and current master on top of the svn sync branch.
 git rebase --onto svn-sync-branch svn-last-sync svn-tmp
@@ -34,7 +33,6 @@ if [ $successfulrebase -ne 0 ]; then
 	git rebase --onto svn-sync-branch svn-last-sync svn-tmp
 fi
 
-
 # Fast forward the svn sync branch with the squashed commit.
 git checkout svn-sync-branch
 git merge --ff-only svn-tmp
@@ -45,4 +43,7 @@ git svn dcommit
 # Update the pointer to the last synced commit
 git branch -f svn-last-sync master
 git checkout svn-last-sync
+
+# Clean up temporary work branch (release mutex).
+git branch -D svn-tmp
 
