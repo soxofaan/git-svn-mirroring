@@ -29,15 +29,15 @@ git rebase --onto $svnsyncbranch $svnlastsync $workbranch
 successfulrebase=$?
 
 if [ $successfulrebase -ne 0 ]; then
-	# Undo rebase
+	# Undo rebase.
 	git rebase --abort
 
-	# Start over: reset working branch to last sync point
+	# Start over: reset working branch to last sync point.
 	git checkout $svnlastsync
 	git branch -f $workbranch $svnlastsync
 	git checkout $workbranch
 	# Now squash the new commits to one commit
-	# (to avoid the rebase problems) and commit on the temporary branch 
+	# (to avoid the rebase problems) and commit on the temporary branch.
 	git merge --squash $gitmaster
 	git commit -F .git/SQUASH_MSG
 
@@ -45,19 +45,19 @@ if [ $successfulrebase -ne 0 ]; then
 	git rebase --onto $svnsyncbranch $svnlastsync $workbranch
 fi
 
-# Fast forward the svn sync branch with the squashed commit.
+# Fast forward the svn sync branch with the rebased/squashed commits.
 git checkout $svnsyncbranch
 git merge --ff-only $workbranch
 
-# Sync the suqashed commit to Subversion
+# Send the new rebased/squashed commits to Subversion.
 git svn dcommit
 
-# Update the pointer to the last synced commit
+# Update the pointer to the last synced commit.
 git branch -f $svnlastsync $gitmaster
 
 # Clean up temporary work branch (release mutex).
 git branch -D $workbranch
 
-# Return to master branch
+# Return to master branch.
 git checkout $gitmaster
 
