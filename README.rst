@@ -37,9 +37,11 @@ the sync tools, but all other "users" of the SVN repo should only read ("svn upd
 The trick to allow full git branching functionality combined with git-svn syncing 
 is to keep a dedicated git-svn sync branch completely separate from the bunch of
 normal git branches ("master", "develop", topic branches, integration branches, ...).
-To avoid merging issues do to commit rewriting, there should be no merging between
-this dedicated git-svn sync branch and the normal branches. 
-Instead, to keep things in sync, commits should be ported/transferred with a 
+All normal, daily work and commits should happen on the normal branches, the git-svn sync
+branch is only for internal housekeeping and should not be committed on directly.
+To avoid merging issues do to commit rewriting, there should also be no merging between
+the dedicated git-svn sync branch and the normal branches. 
+Instead, to keep things in sync, commits are ported/transferred by the sync script  with a 
 "git rebase --onto" trick. This has the added benefit that git rebase will try to 
 create a linear commit-history on the git-svn sync branch
 from a possibly non-linear history in the bunch of normal branches. 
