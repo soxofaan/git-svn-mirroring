@@ -46,5 +46,16 @@ Instead, to keep things in sync, commits are ported/transferred by the sync scri
 create a linear commit-history on the git-svn sync branch
 from a possibly non-linear history in the bunch of normal branches. 
 
+TODO ...
+
+
+
+
+Literature/inspiration/alternatives
+---------------------------------------
+
+* http://www.kerrybuckley.org/2009/10/06/maintaining-a-read-only-svn-mirror-of-a-git-repository/
+* http://zenadmin.org/en/blog/page439.html
+* http://www.codeography.com/2010/03/17/howto-mirror-git-to-subversion.html
 
 
