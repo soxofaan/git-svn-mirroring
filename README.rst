@@ -39,12 +39,63 @@ is to keep a dedicated git-svn sync branch completely separate from the bunch of
 normal git branches ("master", "develop", topic branches, integration branches, ...).
 All normal, daily work and commits should happen on the normal branches, the git-svn sync
 branch is only for internal housekeeping and should not be committed on directly.
-To avoid merging issues do to commit rewriting, there should also be no merging between
+To avoid merging issues due to commit rewriting, there should also be no merging between
 the dedicated git-svn sync branch and the normal branches. 
-Instead, to keep things in sync, commits are ported/transferred by the sync script  with a 
+Instead, to keep things in sync, commits are ported/transferred by the sync script with a 
 "git rebase --onto" trick. This has the added benefit that git rebase will try to 
 create a linear commit-history on the git-svn sync branch
 from a possibly non-linear history in the bunch of normal branches. 
+
+
+The sync-git-master-to-svn.sh script
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This script should be executed from within the central Git repo.
+It assumes a certain working context, based on two Git branches
+that are used for interal housekeeping:
+
+* svn-sync/svn-side: this is the Git branch that will be synced to the SVN repo
+  with the git-svn tool. This implies that the original/initial git-svn remote tracking branch
+  should be an ancestor of the svn-sync/svn-side branch.
+* svn-sync/git-side, which tracks the commits on the
+  git master branch that are already synced.
+
+It is vital that these the content pointed to by these two branches 
+is the same, meaning that the diff between the two should be empty. 
+However, this does not mean that these two branches point at the same
+Git commit. On the contrary, only at initialisation they will point 
+to the same Git commit. Due to the syncing approach, the branches will follow their
+own seprate history with separate git commits. 
+As already noted, they should never be merged, so from the standpoint of Git, they 
+diverge in terms of commits. 
+In terms of raw content on the other hand, they point to the same.   
+
+
+A typical initialisation is starting from an existing SVN repo and convert it to Git,
+like so:
+
+    # Convert SVN repo to Git repo
+    git svn clone --prefix=svn/ $svn-repo-url git-repo
+    cd git-repo
+    # Initialize the svn-sync housekeeping branches
+    git branch svn-sync/svn-side master
+    git branch svn-sync/git-side master
+
+From here we can work on the master branch using standard Git workflow
+tools like branching, merging, rebasing etc.
+
+
+At some point, we want to sync our work to SVN and just call 
+
+    sync-git-master-to-svn.sh
+
+This can be on each commit/merge on master, or less frequently (e.g. once a day). 
+The script does not make an assumption here. 
+
+
+
+
+
 
 TODO ...
 
