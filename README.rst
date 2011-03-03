@@ -3,7 +3,7 @@ This is a bunch of scripts attempting to set up Git to SVN mirroring, without th
 branching/merging/pulling constraints set by the standard git-svn tool.
 
 Git-svn caveats
-----------------
+==================
 
 Git-svn is a well known option to use Git as an SVN client, but it comes with some caveats and
 constraints. To quote the git-svn manual page:
@@ -26,7 +26,7 @@ git-svn, it makes the usefulness of git-svn pretty limited in real projects and 
 
 
 Mirroring a read/write Git repo to a read-only SVN repo mirror
----------------------------------------------------------------
+==================================================================
 
 This was the initial target use case for these sync scripts.
 The aim is to allow all standard git operations like branching, merging, pushing, pulling
@@ -48,7 +48,7 @@ from a possibly non-linear history in the bunch of normal branches.
 
 
 The sync-git-master-to-svn.sh script
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------------
 
 This script should be executed from within the central Git repo.
 It assumes a certain working context, based on two Git branches
@@ -71,8 +71,8 @@ diverge in terms of commits.
 In terms of raw content on the other hand, they point to the same.   
 
 
-A typical initialisation is starting from an existing SVN repo and convert it to Git,
-like so:
+A typical initialization is starting from an existing SVN repo and convert it to Git,
+like so::
 
     # Convert SVN repo to Git repo
     git svn clone --prefix=svn/ $svn-repo-url git-repo
@@ -85,7 +85,7 @@ From here we can work on the master branch using standard Git workflow
 tools like branching, merging, rebasing etc.
 
 
-At some point, we want to sync our work to SVN and just call 
+At some point, we want to sync our work to SVN and just call::
 
     sync-git-master-to-svn.sh
 
