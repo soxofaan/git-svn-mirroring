@@ -8,11 +8,23 @@ die() {
 }
 
 # The git master branch that has to be synced to SVN.
-gitmaster=master
+if [ -n "$1" ] ; then
+	gitmaster=$1
+else
+	gitmaster=master
+fi
 # The branch that is used to interface with SVN through git-svn rebase and dcommit.
-svnside=svn-sync/svn-side
+if [ -n "$2" ] ; then
+	svnside=$2
+else
+	svnside=svn-sync/svn-side
+fi
 # Pointer (on the git master branch) to the last synced commit.
-gitside=svn-sync/git-side
+if [ -n "$3" ] ; then
+	gitside=$3
+else
+	gitside=svn-sync/git-side
+fi
 # Temporary work branch that will be ported with rebase from $gitmaster to $svnside.
 work=svn-sync/tmp-git2svn
 
