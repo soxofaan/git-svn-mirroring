@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# TODO: detect current checked out branch/HEAD and return to it after completion.
-
 die() {
 	echo "sync-git-master-to-svn died: $*"
 	exit 1
@@ -27,6 +25,9 @@ else
 fi
 # Temporary work branch that will be ported with rebase from $gitmaster to $svnside.
 work=svn-sync/tmp-git2svn
+
+# The branch/ref/commit to return to. TODO: detect the current checked out branch/HEAD/ref.
+returntarget=$gitmaster
 
 
 # Handy for debugging
@@ -66,6 +67,7 @@ if [ $successfulrebase -ne 0 ]; then
 	successfulrebase=$?
 
 	if [ $successfulrebase -ne 0 ]; then
+		git checkout $returntarget
 		die "rebasing failed"
 	fi
 fi
@@ -84,5 +86,5 @@ git branch -f $gitside $gitmaster
 git branch -D $work
 
 # Return to master branch.
-git checkout $gitmaster
+git checkout $returntarget
 
