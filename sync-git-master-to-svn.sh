@@ -63,6 +63,11 @@ if [ $successfulrebase -ne 0 ]; then
 
 	# Rebase the squashed commit on top of the svn sync branch.
 	git rebase --onto $svnside $gitside $work
+	successfulrebase=$?
+
+	if [ $successfulrebase -ne 0 ]; then
+		die "rebasing failed"
+	fi
 fi
 
 # Fast forward the svn sync branch with the rebased/squashed commits.
