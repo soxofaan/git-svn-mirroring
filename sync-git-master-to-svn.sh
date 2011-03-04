@@ -29,7 +29,7 @@ fi
 work=svn-sync/tmp-git2svn
 
 
-# Handy for dedbugging
+# Handy for debugging
 set -x
 
 # Check that SVN-side and Git are in sync
