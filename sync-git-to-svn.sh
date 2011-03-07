@@ -74,16 +74,28 @@ fi
 
 # Fast forward the svn sync branch with the rebased/squashed commits.
 git checkout $svnside
+git branch $svnside-orig
 git merge --ff-only $work
 
 # Send the new rebased/squashed commits to Subversion (updated the SVN-side pointer $svnside).
 git svn dcommit
+
+if [ $? -ne 0 ]; then
+	# Return to target and clean up a bit.
+	git checkout $returntarget
+	git branch -f $svnside $svnside-orig
+	git branch -D $svnside-orig
+	git branch -D $work
+	# Die
+	die "svn dcommit failed"
+fi
 
 # Update the Git-side pointer to the last synced commit.
 git branch -f $gitside $gitmaster
 
 # Clean up temporary work branch (release mutex).
 git branch -D $work
+git branch -D $svnside-orig
 
 # Return to master branch.
 git checkout $returntarget
