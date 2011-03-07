@@ -47,7 +47,7 @@ create a linear commit-history on the git-svn sync branch
 from a possibly non-linear history in the bunch of normal branches. 
 
 
-The sync-git-master-to-svn.sh script
+The sync-git-to-svn.sh script
 -----------------------------------------
 
 This script should be executed from within the central Git repo.
@@ -87,7 +87,7 @@ tools like branching, merging, rebasing etc.
 
 At some point, we want to sync our work to SVN and just call::
 
-    sync-git-master-to-svn.sh
+    sync-git-to-svn.sh
 
 This can be on each commit/merge on master, or less frequently (e.g. once a day). 
 The script does not make an assumption here. 

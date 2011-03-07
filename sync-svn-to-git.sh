@@ -3,7 +3,7 @@
 # TODO: detect current checked out branch/HEAD and return to it after completion.
 
 die() {
-	echo "sync-git-master-to-svn died: $*"
+	echo "sync-svn-to-git died: $*"
 	exit 1
 }
 

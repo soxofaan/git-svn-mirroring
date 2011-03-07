@@ -1,7 +1,7 @@
 #!/bin/bash
 
 die() {
-	echo "sync-git-master-to-svn died: $*"
+	echo "sync-git-to-svn died: $*"
 	exit 1
 }
 
