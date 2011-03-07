@@ -34,7 +34,7 @@ returntarget=$gitmaster
 set -x
 
 # Check that SVN-side and Git are in sync
-diff=$(git diff --ignore-submodules=all $svnside..$gitside | wc -c)
+diff=$(git diff --ignore-submodules $svnside..$gitside | wc -c)
 if [ $diff -gt 0 ]
 then
 	die "svn-sync/svn-side and svn-sync/git-side are out of sync"
