@@ -78,7 +78,7 @@ git branch $svnside-orig
 git merge --ff-only $work
 
 # Send the new rebased/squashed commits to Subversion (updated the SVN-side pointer $svnside).
-git svn dcommit
+git svn dcommit --add-author-from
 
 if [ $? -ne 0 ]; then
 	# Return to target and clean up a bit.
