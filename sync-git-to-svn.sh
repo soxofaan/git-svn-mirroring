@@ -74,7 +74,7 @@ fi
 
 # Fast forward the svn sync branch with the rebased/squashed commits.
 git checkout $svnside
-git branch $svnside-orig
+git branch $svnside-orig $svnside
 git merge --ff-only $work
 
 # Send the new rebased/squashed commits to Subversion (updated the SVN-side pointer $svnside).
