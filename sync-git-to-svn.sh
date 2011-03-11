@@ -77,6 +77,10 @@ git checkout $svnside
 git branch $svnside-orig $svnside
 git merge --ff-only $work
 
+if [ $? -ne 0 ]; then
+	die "fast forward merge of work into svnside failed"
+fi
+
 # Send the new rebased/squashed commits to Subversion (updated the SVN-side pointer $svnside).
 git svn dcommit --add-author-from
 
