@@ -81,6 +81,14 @@ if [ $? -ne 0 ]; then
 	die "fast forward merge of work into svnside failed"
 fi
 
+
+# Check that rebased SVN-side and Git master branch are in sync
+diff=$(git diff --ignore-submodules $svnside..$gitmaster | wc -c)
+if [ $diff -gt 0 ]
+then
+	die "svn-sync/svn-side and $gitmaster are not in sync"
+fi
+
 # Send the new rebased/squashed commits to Subversion (updated the SVN-side pointer $svnside).
 git svn dcommit --add-author-from
 
