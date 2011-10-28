@@ -7,7 +7,7 @@ die() {
 	exit 1
 }
 
-# The git master branch that has to be synced to SVN.
+# The git master branch to which SVN has to be synced to.
 gitmaster=master
 # The branch that is used to interface with SVN through git-svn rebase and dcommit.
 svnside=svn-sync/svn-side
@@ -17,7 +17,7 @@ gitside=svn-sync/git-side
 workstart=svn-sync/tmp-svn2git-start
 workend=svn-sync/tmp-svn2git-end
 
-# Handy for dedbugging
+# Handy for debugging
 set -x
 
 # Set pointer to last commit from current SVN branch.

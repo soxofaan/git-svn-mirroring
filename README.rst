@@ -63,12 +63,12 @@ that are used for interal housekeeping:
 It is vital that these the content pointed to by these two branches 
 is the same, meaning that the diff between the two should be empty. 
 However, this does not mean that these two branches point at the same
-Git commit. On the contrary, only at initialisation they will point 
-to the same Git commit. Due to the syncing approach, the branches will follow their
+Git commit. On the contrary, they will point to the same Git commit,
+only at initialisation or, in some cases, they won't share any history at all.
+Due to the syncing approach, the branches will follow their
 own seprate history with separate git commits. 
 As already noted, they should never be merged, so from the standpoint of Git, they 
-diverge in terms of commits. 
-In terms of raw content on the other hand, they point to the same.   
+diverge in terms of commits. But in terms of raw content, they will be "in sync".
 
 
 A typical initialization is starting from an existing SVN repo and convert it to Git,
@@ -91,7 +91,6 @@ At some point, we want to sync our work to SVN and just call::
 
 This can be on each commit/merge on master, or less frequently (e.g. once a day). 
 The script does not make an assumption here. 
-
 
 
 
