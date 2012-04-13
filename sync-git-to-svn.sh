@@ -45,6 +45,13 @@ fi
 # Note that this branch also acts as sort of mutex.
 git branch $work $gitmaster || die 'Could not create temporary working branch, maybe another sync is in progress?'
 
+# Remove submodules from work branch before rebasing
+git checkout $work
+submodules=$(git submodule status | sed 's/^[[:space:]]*\(.*\)/\1/' | cut -d ' ' -f 2)
+if [ -n $submodules ]; then
+	git filter-branch --prune-empty --force --index-filter "git rm --cached --ignore-unmatch $submodules" $gitside..$work
+fi
+
 # Rebase the commits between last sync point and current master on top of the svn sync branch.
 git rebase --onto $svnside $gitside $work
 successfulrebase=$?
