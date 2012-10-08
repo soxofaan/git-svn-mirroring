@@ -48,7 +48,7 @@ git branch $work $gitmaster || die 'Could not create temporary working branch, m
 # Remove submodules from work branch before rebasing
 git checkout $work
 submodules=$(git submodule status | sed 's/^[[:space:]]*\(.*\)/\1/' | cut -d ' ' -f 2)
-if [ -n $submodules ]; then
+if [ -n "$submodules" ]; then
 	git filter-branch --prune-empty --force --index-filter "git rm --cached --ignore-unmatch $submodules" $gitside..$work
 fi
 
